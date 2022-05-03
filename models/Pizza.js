@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const PizzaSchema = new schema ({
+const PizzaSchema = new Schema ({
     pizzaName:{
         type: String
     },
