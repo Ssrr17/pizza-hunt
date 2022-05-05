@@ -33,6 +33,7 @@ createPizza({ body }, res) {
     Pizza.create(body)
       .then(dbPizzaData => res.json(dbPizzaData))
       .catch(err => res.status(400).json(err));
+      console.log(body);
   },
   // update pizza by id
 updatePizza({ params, body }, res) {
