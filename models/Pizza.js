@@ -23,10 +23,11 @@ const PizzaSchema = new Schema(
         ref: "Comment", //ref tells pizza model which documents to search
       },
     ],
-  },ere
+  },
   {
     toJSON: {
       virtuals: true,
+      getters: true
     },
     id: false,//We set id to false because this is a virtual that Mongoose returns, and we don’t need it.
   }
@@ -40,5 +41,5 @@ PizzaSchema.virtual("commentCount").get(function () {
 // create the Pizza model using the PizzaSchema
 const Pizza = model("Pizza", PizzaSchema);
 
-// export the Pizza modelax
+// export the Pizza model
 module.exports = Pizza;
