@@ -9,8 +9,7 @@ const commentController = {
         return Pizza.findOneAndUpdate(
           { _id: params.pizzaId },
           { $push: { comments: _id } },
-          { new: true } //Again, because we passed the option of new: true, we're receiving back the updated pizza (the pizza with the new comment included).
-
+          { new: true }
         );
       })
       .then(dbPizzaData => {
@@ -23,6 +22,18 @@ const commentController = {
       .catch(err => res.json(err));
   },
 
+  // add reply to comment
+  addReply({ params, body }, res) {
+    Comment.findOneAndUpdate({ _id: params.commentId }, { $push: { replies: body } }, { new: true })
+      .then(dbPizzaData => {
+        if (!dbPizzaData) {
+          res.status(404).json({ message: 'No pizza found with this id!' });
+          return;
+        }
+        res.json(dbPizzaData);
+      })
+      .catch(err => res.json(err));
+  },
 
   // remove comment
   removeComment({ params }, res) {
@@ -33,8 +44,8 @@ const commentController = {
         }
         return Pizza.findOneAndUpdate(
           { _id: params.pizzaId },
-          { $pull: { comments: params.commentId } }, //then take that data and use it to identify and remove it from the associated pizza using the Mongo $pull operation
-          { new: true } // Lastly, we return the updated pizza data, now without the _id of the comment in the comments array, and return it to the user.
+          { $pull: { comments: params.commentId } },
+          { new: true }
         );
       })
       .then(dbPizzaData => {
@@ -44,6 +55,16 @@ const commentController = {
         }
         res.json(dbPizzaData);
       })
+      .catch(err => res.json(err));
+  },
+  // remove reply
+  removeReply({ params }, res) {
+    Comment.findOneAndUpdate(
+      { _id: params.commentId },
+      { $pull: { replies: { replyId: params.replyId } } },
+      { new: true }
+    )
+      .then(dbPizzaData => res.json(dbPizzaData))
       .catch(err => res.json(err));
   }
 };
